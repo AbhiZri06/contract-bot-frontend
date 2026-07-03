@@ -1,65 +1,79 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.[0]) return;
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+
+    try {
+      // This sends the uploaded file to the local Python server brain we built!
+      const res = await fetch("http://127.0.0.1:8000/api/analyze", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+      setData(json);
+    } catch (err) {
+      alert("Error: Cannot connect to your Python brain server. Make sure main.py is running!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="p-8 max-w-4xl mx-auto space-y-6 font-sans">
+      <div className="text-center space-y-2">
+        <h1 className="text-3xl font-extrabold text-gray-900">Freelancer Contract Auditor</h1>
+        <p className="text-gray-500">Upload any contract PDF to verify your safety ranking instantly.</p>
+      </div>
+
+      {/* 1. Drag and Drop Input Box */}
+      <div className="border-4 border-dashed border-gray-200 rounded-2xl p-12 text-center bg-gray-50 hover:bg-gray-100 transition-all cursor-pointer">
+        <input type="file" accept=".pdf" onChange={handleFileUpload} className="mx-auto block cursor-pointer" />
+        <p className="mt-2 text-sm text-gray-400">Click to pick your contract (PDF format only)</p>
+      </div>
+
+      {/* 2. Loading State */}
+      {loading && (
+        <div className="p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded-xl text-center font-semibold animate-pulse">
+          🔄 Google Gemini is reading your contract pages now... Please hold on...
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      )}
+
+      {/* 3. The Report View Dashboard */}
+      {data && (
+        <div className="space-y-6">
+          <div className="p-6 bg-white shadow-md rounded-2xl border border-gray-100">
+            <h2 className="text-2xl font-bold text-gray-800">Safety Score: {data.overall_score}/100</h2>
+            <p className="text-gray-600 mt-2 text-sm leading-relaxed">{data.summary}</p>
+          </div>
+
+          <div className="grid gap-4">
+            {data.risks?.map((risk: any, i: number) => (
+              <div key={i} className={`p-5 rounded-2xl border-l-8 shadow-sm ${
+                risk.severity === "HIGH" ? "border-red-500 bg-red-50" : "border-amber-500 bg-amber-50"
+              }`}>
+                <div className="flex justify-between items-start">
+                  <h4 className="text-lg font-bold text-gray-800">{risk.clause_title}</h4>
+                  <span className={`text-xs px-2.5 py-1 font-bold rounded-full ${
+                    risk.severity === "HIGH" ? "bg-red-200 text-red-800" : "bg-amber-200 text-amber-800"
+                  }`}>{risk.severity} RISK</span>
+                </div>
+                <p className="text-xs text-gray-500 italic bg-white p-3 rounded-lg border mt-2">"{risk.original_text}"</p>
+                <p className="text-sm text-gray-700 mt-3"><strong>Why it's bad:</strong> {risk.explanation}</p>
+                <p className="text-sm text-emerald-800 mt-1.5 bg-emerald-50 p-2.5 rounded-lg"><strong>Suggested Fix:</strong> {risk.suggestion}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      )}
+    </main>
   );
 }
