@@ -2,7 +2,7 @@
 
 A full-stack, cloud-hosted web application that leverages Google's **Gemini API** to automatically analyze legal contracts and agreements from uploaded PDFs, delivering instant executive summaries, key obligations breakdown, and structural risk identification.
 
-![Contract AI Analyzer Interface](path_to_screenshot/screenshot.jpg)
+![Contract AI Analyzer Interface](Screenshot 2026-11-05 at 22.08.12.png)
 
 ---
 
