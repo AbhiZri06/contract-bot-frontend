@@ -2,6 +2,8 @@
 
 A full-stack, cloud-hosted web application that leverages Google's **Gemini API** to automatically analyze legal contracts and agreements from uploaded PDFs, delivering instant executive summaries, key obligations breakdown, and structural risk identification.
 
+Live Demo: https://huggingface.co/spaces/abhizri006/contract-bot-backend
+
 ---
 
 ## 🚀 Key Features
@@ -33,6 +35,6 @@ Open your terminal (or VS Code integrated terminal) and make sure you are inside
 ### Step 2: Install Dependencies
 Install all required Python packages (FastAPI, Uvicorn, `pypdf`, and the Google GenAI SDK) using your `requirements.txt` file:
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt 
 
-Live Demo: https://huggingface.co/spaces/abhizri006/contract-bot-backend
+
