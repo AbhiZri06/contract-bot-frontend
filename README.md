@@ -2,8 +2,6 @@
 
 A full-stack, cloud-hosted web application that leverages Google's **Gemini API** to automatically analyze legal contracts and agreements from uploaded PDFs, delivering instant executive summaries, key obligations breakdown, and structural risk identification.
 
-![Contract AI Analyzer Interface](contract-bot-frontend/Screenshot 2026-11-05 at 22.08.12.png)
-
 ---
 
 ## 🚀 Key Features
@@ -25,11 +23,14 @@ A full-stack, cloud-hosted web application that leverages Google's **Gemini API*
 
 ---
 
-## 🏃‍♂️ Getting Started Locally
+## 🏃‍♂️ Step-by-Step Guide to Run Locally
 
-Follow these steps to run the project on your local machine:
+Follow these steps to set up and run the application on your local machine:
 
-### 1. Clone the repository
+### Step 1: Open Terminal in Project Folder
+Open your terminal (or VS Code integrated terminal) and make sure you are inside your project root directory (`contract-bot`).
+
+### Step 2: Install Dependencies
+Install all required Python packages (FastAPI, Uvicorn, `pypdf`, and the Google GenAI SDK) using your `requirements.txt` file:
 ```bash
-git clone [https://github.com/abhizri006/contract-bot.git](https://github.com/abhizri006/contract-bot.git)
-cd contract-bot
+pip install -r requirements.txt
