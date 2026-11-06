@@ -34,3 +34,5 @@ Open your terminal (or VS Code integrated terminal) and make sure you are inside
 Install all required Python packages (FastAPI, Uvicorn, `pypdf`, and the Google GenAI SDK) using your `requirements.txt` file:
 ```bash
 pip install -r requirements.txt
+
+Live Demo: https://huggingface.co/spaces/abhizri006/contract-bot-backend
