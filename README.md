@@ -1,11 +1,3 @@
----
-title: Contract AI Analyzer
-emoji: 📄
-colorFrom: blue
-colorTo: indigo
-sdk: docker
-pinned: false
----
 
 # 📄 Contract AI Analyzer
 
